@@ -350,6 +350,28 @@ full and incremental migration approaches.
 
 ---
 
+## Releases
+
+Pre-built Lambda zip files are published as GitHub Release assets on every
+tagged version. Each release includes builds for both architectures:
+
+| Asset | Architecture |
+|---|---|
+| `lfs-broker-linux-amd64.zip` | x86_64 |
+| `lfs-broker-linux-arm64.zip` | arm64 |
+| `lfs-snapshot-linux-amd64.zip` | x86_64 |
+| `lfs-snapshot-linux-arm64.zip` | arm64 |
+
+### Creating a release
+
+```bash
+git tag v1.0.0
+git push origin v1.0.0
+```
+
+The GitHub Actions workflow builds both lambdas for both architectures and
+attaches the zips to the release automatically.
+
 ## Background
 
 This project was built to solve a specific problem for the
