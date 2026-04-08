@@ -1,0 +1,32 @@
+name: Snapshot to S3 on merge
+
+on:
+  push:
+    branches: [master]
+
+jobs:
+  snapshot:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get changed files
+        id: changed
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 2
+
+      - name: Build changed files list
+        id: files
+        run: |
+          FILES=$(git diff --name-only HEAD~1 HEAD | jq -R . | jq -s . | tr -d '\n')
+          echo "changed_files=$FILES" >> $GITHUB_OUTPUT
+
+      - name: Trigger snapshot Lambda
+        run: |
+          curl -X POST ${{ secrets.SNAPSHOT_LAMBDA_URL }} \
+            -H "Content-Type: application/json" \
+            -d '{
+              "repo": "${{ github.repository }}",
+              "ref": "${{ github.ref_name }}",
+              "token": "${{ secrets.GITHUB_TOKEN }}",
+              "changed_files": ${{ steps.files.outputs.changed_files }}
+            }'

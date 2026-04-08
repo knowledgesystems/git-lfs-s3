@@ -1,0 +1,13 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "AWS": "arn:aws:iam::FIRST_ACCOUNT_ID:role/github-lfs-lambda-role"
+      },
+      "Action": "s3:PutObject",
+      "Resource": "arn:aws:s3:::SECOND_ACCOUNT_BUCKET/*"
+    }
+  ]
+}
