@@ -93,7 +93,7 @@ func init() {
 		extraBuckets = strings.Split(raw, ",")
 	}
 
-	pathPrefix = os.Getenv("PATH_PREFIX")
+	pathPrefix = os.Getenv("LFS_PATH_PREFIX")
 	if pathPrefix == "" {
 		pathPrefix = "lfs/objects"
 	}

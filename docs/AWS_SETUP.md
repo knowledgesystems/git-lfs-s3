@@ -276,6 +276,7 @@ direct upload/download.
 |---|---|---|
 | `S3_BUCKET` | `YOUR_BUCKET_NAME` | Target S3 bucket name |
 | `LFS_SECRET_NAME` | `github-lfs-api-keys` | Secrets Manager secret name |
+| `LFS_PATH_PREFIX` | `lfs/objects` *(default)* | S3 key prefix for LFS objects |
 
 Note: Do not set `AWS_REGION` — this is reserved by the Lambda runtime.
 
@@ -305,6 +306,7 @@ Action. Supports both full and incremental modes.
 | `LFS_BUCKET` | `YOUR_BUCKET_NAME` | Source bucket for LFS objects |
 | `SNAPSHOT_BUCKET` | `YOUR_BUCKET_NAME` | Primary destination for snapshot files |
 | `SNAPSHOT_PREFIX` | `public/` | Prefix for snapshot files (empty = bucket root) |
+| `LFS_PATH_PREFIX` | `lfs/objects` *(default)* | S3 key prefix for LFS objects |
 | `EXTRA_SNAPSHOT_BUCKETS` | *(optional)* | Comma-separated list of additional buckets to sync to |
 
 Note: `LFS_BUCKET` and `SNAPSHOT_BUCKET` are the same value — a single

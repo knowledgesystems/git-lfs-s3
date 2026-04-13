@@ -94,7 +94,7 @@ func init() {
 		log.Fatal("LFS_SECRET_NAME environment variable is required")
 	}
 
-	pathPrefix = os.Getenv("PATH_PREFIX")
+	pathPrefix = os.Getenv("LFS_PATH_PREFIX")
 	if pathPrefix == "" {
 		pathPrefix = "lfs/objects"
 	}
