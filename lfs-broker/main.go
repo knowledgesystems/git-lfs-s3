@@ -79,6 +79,7 @@ var (
 	smClient    *secretsmanager.Client
 	bucketName  string
 	secretName  string
+	pathPrefix  string
 	apiKeyCache = &secretCache{}
 )
 
@@ -91,6 +92,11 @@ func init() {
 	secretName = os.Getenv("LFS_SECRET_NAME")
 	if secretName == "" {
 		log.Fatal("LFS_SECRET_NAME environment variable is required")
+	}
+
+	pathPrefix = os.Getenv("PATH_PREFIX")
+	if pathPrefix == "" {
+		pathPrefix = "lfs/objects"
 	}
 
 	cfg, err := config.LoadDefaultConfig(context.Background())
@@ -226,8 +232,8 @@ func handler(ctx context.Context, req events.LambdaFunctionURLRequest) (events.L
 
 func processObject(ctx context.Context, operation string, obj LFSObject) (LFSObjectResult, error) {
 	// S3 key derived from OID using standard LFS content-addressable layout
-	// e.g. oid abc123... -> lfs/objects/ab/c1/abc123...
-	key := fmt.Sprintf("lfs/objects/%s/%s/%s", obj.OID[:2], obj.OID[2:4], obj.OID)
+	// e.g. oid abc123... -> <pathPrefix>/ab/c1/abc123...
+	key := fmt.Sprintf("%s/%s/%s/%s", pathPrefix, obj.OID[:2], obj.OID[2:4], obj.OID)
 
 	var href string
 	var err error

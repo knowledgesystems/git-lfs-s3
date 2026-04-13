@@ -64,6 +64,7 @@ var (
 	lfsBucket      string
 	snapshotBucket string
 	snapshotPrefix string
+	pathPrefix     string
 	extraBuckets   []string
 	httpClient     = &http.Client{}
 )
@@ -90,6 +91,11 @@ func init() {
 	// snapshot bucket. If empty or unset, only the primary bucket is written to.
 	if raw := os.Getenv("EXTRA_SNAPSHOT_BUCKETS"); raw != "" {
 		extraBuckets = strings.Split(raw, ",")
+	}
+
+	pathPrefix = os.Getenv("PATH_PREFIX")
+	if pathPrefix == "" {
+		pathPrefix = "lfs/objects"
 	}
 
 	cfg, err := config.LoadDefaultConfig(context.Background())
@@ -310,8 +316,8 @@ func streamLFSObjectToSnapshot(ctx context.Context, pointer *LFSPointer, destBuc
 	}
 
 	// LFS content-addressable key
-	srcKey := fmt.Sprintf("lfs/objects/%s/%s/%s",
-		pointer.OID[:2], pointer.OID[2:4], pointer.OID)
+	srcKey := fmt.Sprintf("%s/%s/%s/%s",
+		pathPrefix, pointer.OID[:2], pointer.OID[2:4], pointer.OID)
 
 	// Get the object from the LFS bucket as a stream
 	getResult, err := s3Client.GetObject(ctx, &s3.GetObjectInput{
